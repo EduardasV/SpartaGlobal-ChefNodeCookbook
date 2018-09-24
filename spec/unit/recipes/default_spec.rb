@@ -19,6 +19,10 @@ describe 'node::default' do
       expect { chef_run }.to_not raise_error
     end
 
+    it 'should update all packages' do
+      expect(chef_run).to update_apt_update('update')
+    end
+
     it 'Should install nginx' do
       expect(chef_run).to install_package('nginx')
     end
@@ -29,6 +33,18 @@ describe 'node::default' do
 
     it 'Should install pm2 via npm' do
       expect(chef_run).to install_nodejs_npm('pm2')
+    end
+
+    it 'should create a proxy.conf template in /etc/nginx/sites-available' do
+      expect(chef_run).to create_template("/etc/nginx/sites-available/proxy.conf")
+    end
+
+    it 'should create a symlink of proxy.conf from sites-available to sites-enabled' do
+      expect(chef_run).to create_link("/etc/nginx/sites-enabled/proxy.conf").with_link_type(:symbolic)
+    end
+
+    it 'should delte the symlink from the default config in sites-enabled' do
+      expect(chef_run).to delete_link("/etc/nginx/sites-enabled/default")
     end
   end
 end
