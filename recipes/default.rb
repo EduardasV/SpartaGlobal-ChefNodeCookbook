@@ -11,6 +11,10 @@ package "nginx" do
   action :install
 end
 
+apt_update 'update' do
+  action :update
+end
+
 service "nginx" do
   action [:enable, :start]
 end
