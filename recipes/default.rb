@@ -4,15 +4,15 @@
 #
 # Copyright:: 2018, The Authors, All Rights Reserved.
 
+apt_update 'update' do
+  action :update
+end
+
 include_recipe 'nodejs'
 nodejs_npm 'pm2'
 
 package "nginx" do
   action :install
-end
-
-apt_update 'update' do
-  action :update
 end
 
 service "nginx" do
